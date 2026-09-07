@@ -153,8 +153,8 @@
   <div class="portada">
     <h1>Porcentaje de Retención en los Cursos</h1>
     <p>Complete los datos de sus cursos y secciones. Los por cientos de aprobación, bajas y fracasos se calculan
-       automáticamente a partir de la matrícula informada. Al terminar, descargue el formulario en Word con la firma
-       pendiente de rúbrica.</p>
+       automáticamente a partir de la matrícula informada. Al terminar, descargue el formulario en Word.
+       Solo faltaría incluir su firma.</p>
   </div>
 
   <section class="panel">
@@ -167,9 +167,9 @@
           <option value="Colegio de Administración de Empresas"></option>
           <option value="Colegio de Artes y Humanidades"></option>
           <option value="Colegio de Ciencias"></option>
-          <option value="Colegio de Ciencias Sociales"></option>
+          <option value="Colegio de Ciencias de la Conducta y Asuntos de la Comunidad"></option>
           <option value="Colegio de Educación"></option>
-          <option value="Colegio de Derecho"></option>
+          <option value="Escuela de Arquitectura"></option>
         </datalist>
       </div>
       <div class="c6">
@@ -185,14 +185,8 @@
         </select>
       </div>
       <div class="c3">
-        <label for="valorTermino" id="lblValorTermino">Semestre</label>
-        <input type="text" id="valorTermino" placeholder="Primero" list="terminos">
-        <datalist id="terminos">
-          <option value="Primero"></option>
-          <option value="Segundo"></option>
-          <option value="Tercero"></option>
-          <option value="Verano"></option>
-        </datalist>
+        <label for="valorTermino" id="lblValorTermino">Semestre (código de 6 dígitos)</label>
+        <input type="text" id="valorTermino" inputmode="numeric" maxlength="8" placeholder="202720">
       </div>
       <div class="c3">
         <label for="anio">Año académico</label>
@@ -267,7 +261,7 @@
     <span class="estado" id="estado"></span>
   </div>
 
-  <footer>La línea de firma queda en blanco para rúbrica manuscrita. CAI/enero 2008.</footer>
+  <footer>Formulario CAI-03C · Oficina de Avalúo Institucional · CAI/enero 2008</footer>
 </div>
 
 <script>
@@ -344,8 +338,8 @@ function calcular(){
 
 $('btnFila').addEventListener('click', () => { filas.appendChild(nuevaFila()); calcular(); });
 $('tipoTermino').addEventListener('change', e => {
-  $('lblValorTermino').textContent = e.target.value;
-  $('valorTermino').placeholder = e.target.value === 'Semestre' ? 'Primero' : 'Segundo';
+  $('lblValorTermino').textContent = e.target.value + ' (código de 6 dígitos)';
+  $('valorTermino').placeholder = e.target.value === 'Semestre' ? '202720' : '202710';
 });
 
 const MESES = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
@@ -362,7 +356,8 @@ function hoyISO(){
 function limpiar(){
   ['colegio','departamento','valorTermino','anio','profesor'].forEach(i => $(i).value = '');
   $('tipoTermino').value = 'Semestre';
-  $('lblValorTermino').textContent = 'Semestre';
+  $('lblValorTermino').textContent = 'Semestre (código de 6 dígitos)';
+  $('valorTermino').placeholder = '202720';
   document.querySelector('input[name=nivel][value=Subgraduado]').checked = true;
   $('fecha').value = hoyISO();
   filas.innerHTML = '';
@@ -505,7 +500,7 @@ function documentoXml(d){
 
   cuerpo.push(para(run('Formulario para Determinar el Porcentaje de Retención en los Cursos', {b:true, sz:24}), 'center', 0, 240));
 
-  const col1 = 5200, col2 = 4900, col3 = 2860;
+  const col1 = 5200, col2 = 5260, col3 = 2500;
   const c1 = tablaMini([1700, 3400], [
     celdaRotulo(1700, 'Colegio') + celdaLinea(3400, d.colegio, ajusta(d.colegio, 28)),
     celdaRotulo(1700, 'Departamento') + celdaLinea(3400, d.departamento, ajusta(d.departamento, 28))
@@ -513,12 +508,12 @@ function documentoXml(d){
 
   const sem = d.tipoTermino === 'Semestre' ? d.valorTermino : '';
   const tri = d.tipoTermino === 'Trimestre' ? d.valorTermino : '';
-  const c2 = tablaMini([1150, 1000, 1600, 1150], [
-    celdaRotulo(1150, '\u2022 Semestre', 20) + celdaLinea(1000, sem, ajusta(sem, 9, 20)) +
-    celdaRotulo(1600, 'A\u00f1o acad\u00e9mico', 20) + celdaLinea(1150, d.anio, ajusta(d.anio, 10, 20)),
-    celdaRotulo(1150, '\u2022 Trimestre', 20) + celdaLinea(1000, tri, ajusta(tri, 9, 20)) +
-    celdaRotulo(1600, '', 20) + celdaRotulo(1150, '', 20)
-  ], 4900, 300);
+  const c2 = tablaMini([1150, 1250, 1650, 1210], [
+    celdaRotulo(1150, '\u2022 Semestre', 20) + celdaLinea(1250, sem, ajusta(sem, 10, 20)) +
+    celdaRotulo(1650, 'A\u00f1o acad\u00e9mico', 20) + celdaLinea(1210, d.anio, ajusta(d.anio, 10, 20)),
+    celdaRotulo(1150, '\u2022 Trimestre', 20) + celdaLinea(1250, tri, ajusta(tri, 10, 20)) +
+    celdaRotulo(1650, '', 20) + celdaRotulo(1210, '', 20)
+  ], 5260, 300);
 
   const sub = d.nivel === 'Subgraduado' ? '\u2612' : '\u2610';
   const gra = d.nivel === 'Graduado' ? '\u2612' : '\u2610';
