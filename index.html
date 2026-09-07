@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Formulario CAI-03C · Porcentaje de Retención en los Cursos</title>
+<style>
+  :root{
+    --azul:#16345F;
+    --azul-claro:#24518C;
+    --oro:#C9A227;
+    --tinta:#15181D;
+    --gris:#5C6672;
+    --linea:#D2D8E0;
+    --fondo:#EEF1F5;
+    --panel:#FFFFFF;
+    --ok:#1F6B4A;
+    --alerta:#9A2B20;
+    --alerta-fondo:#FCEEEC;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0;
+    background:var(--fondo);
+    color:var(--tinta);
+    font-family:"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    font-size:15px;
+    line-height:1.5;
+  }
+  .hoja{max-width:1180px;margin:0 auto;padding:0 20px 80px}
+
+  /* ---------- membrete ---------- */
+  .membrete{
+    background:var(--azul);
+    color:#fff;
+    margin:0 -20px;
+    padding:20px 28px 18px;
+    border-bottom:4px solid var(--oro);
+    display:flex;align-items:center;gap:20px;flex-wrap:wrap;
+  }
+  .membrete img{width:60px;height:60px;border-radius:50%;background:#fff;flex:none}
+  .membrete .inst{flex:1 1 340px;min-width:0}
+  .membrete .inst b{display:block;font-size:15px;letter-spacing:.02em;font-weight:600}
+  .membrete .inst span{display:block;font-size:13.5px;color:#C7D3E6}
+  .membrete .codigo{font-size:13.5px;color:#C7D3E6;text-align:right;flex:none}
+
+  .portada{padding:26px 0 6px}
+  .portada h1{font-size:25px;line-height:1.25;margin:0 0 6px;font-weight:650;letter-spacing:-.01em}
+  .portada p{margin:0;color:var(--gris);max-width:70ch}
+
+  /* ---------- paneles ---------- */
+  .panel{
+    background:var(--panel);
+    border:1px solid var(--linea);
+    border-radius:6px;
+    margin-top:22px;
+    overflow:hidden;
+  }
+  .panel > h2{
+    margin:0;
+    padding:12px 20px;
+    font-size:14px;
+    font-weight:650;
+    color:var(--azul);
+    background:#F7F9FC;
+    border-bottom:1px solid var(--linea);
+  }
+  .panel > h2 small{font-weight:400;color:var(--gris);margin-left:8px;font-size:13px}
+  .cuerpo{padding:20px}
+
+  .rejilla{display:grid;grid-template-columns:repeat(12,1fr);gap:16px 18px}
+  .c3{grid-column:span 3}.c4{grid-column:span 4}.c5{grid-column:span 5}
+  .c6{grid-column:span 6}.c8{grid-column:span 8}.c12{grid-column:span 12}
+  @media (max-width:820px){.rejilla > *{grid-column:1/-1}}
+
+  label{display:block;font-size:13px;font-weight:600;color:var(--gris);margin-bottom:5px}
+  input[type=text],input[type=date],select{
+    width:100%;padding:9px 11px;font:inherit;color:var(--tinta);
+    background:#fff;border:1px solid var(--linea);border-radius:4px;
+  }
+  input:focus,select:focus,button:focus-visible{outline:2px solid var(--azul-claro);outline-offset:1px}
+  .opciones{display:flex;gap:18px;flex-wrap:wrap;padding-top:4px}
+  .opciones label{display:flex;align-items:center;gap:7px;font-weight:400;color:var(--tinta);margin:0}
+  .opciones input{accent-color:var(--azul);width:16px;height:16px}
+
+  /* ---------- tabla de cursos ---------- */
+  .marco{overflow-x:auto}
+  table{border-collapse:collapse;width:100%;min-width:860px}
+  thead th{
+    font-size:12px;font-weight:650;color:var(--azul);
+    background:#F7F9FC;border:1px solid var(--linea);padding:7px 8px;text-align:center;
+  }
+  thead th.izq{text-align:left}
+  tbody td{border:1px solid var(--linea);padding:5px 6px;vertical-align:middle}
+  tbody input{border:1px solid transparent;background:transparent;padding:7px 8px;width:100%}
+  tbody input:hover{border-color:var(--linea)}
+  tbody input:focus{border-color:var(--azul-claro);background:#fff}
+  td.num input{text-align:center}
+  td.calc{
+    text-align:center;font-variant-numeric:tabular-nums;color:var(--azul);
+    background:#F7F9FC;font-weight:600;
+  }
+  td.quitar{border:none;width:34px;padding-left:6px}
+  .btn-quitar{
+    border:none;background:none;color:var(--gris);font-size:19px;line-height:1;
+    cursor:pointer;padding:4px 6px;border-radius:4px;
+  }
+  .btn-quitar:hover{color:var(--alerta);background:var(--alerta-fondo)}
+  tr.descuadre td{background:var(--alerta-fondo)}
+  tr.descuadre td.calc{background:#F7DFDC}
+
+  .pie-tabla{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin-top:14px}
+  .btn-fila{
+    background:#fff;border:1px solid var(--azul);color:var(--azul);
+    padding:8px 14px;border-radius:4px;font:inherit;font-weight:600;cursor:pointer;
+  }
+  .btn-fila:hover{background:#F0F4FA}
+
+  .resumen{display:flex;gap:26px;flex-wrap:wrap;font-size:13.5px;color:var(--gris)}
+  .resumen b{display:block;font-size:19px;color:var(--azul);font-variant-numeric:tabular-nums;font-weight:650}
+
+  .aviso{
+    margin-top:14px;padding:10px 14px;border-left:3px solid var(--alerta);
+    background:var(--alerta-fondo);color:var(--alerta);font-size:13.5px;border-radius:0 4px 4px 0;
+  }
+  .aviso:empty{display:none}
+
+  /* ---------- acciones ---------- */
+  .acciones{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-top:26px}
+  .btn{padding:13px 22px;font:inherit;font-weight:650;border-radius:4px;cursor:pointer;border:1px solid transparent}
+  .btn-primario{background:var(--azul);color:#fff}
+  .btn-primario:hover{background:var(--azul-claro)}
+  .btn-secundario{background:#fff;border-color:var(--linea);color:var(--tinta)}
+  .btn-secundario:hover{border-color:var(--gris)}
+  .estado{font-size:13.5px;color:var(--ok);font-weight:600}
+  .estado.error{color:var(--alerta)}
+  footer{margin-top:30px;font-size:12.5px;color:var(--gris)}
+</style>
+</head>
+<body>
+<div class="hoja">
+
+  <div class="membrete">
+    <img src="data:image/jpeg;base64,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" alt="Escudo de la Pontificia Universidad Católica de Puerto Rico">
+    <div class="inst">
+      <b>Pontificia Universidad Católica de Puerto Rico</b>
+      <span>Oficina de Avalúo Institucional</span>
+    </div>
+    <div class="codigo">Formulario CAI-03C (v.2008)</div>
+  </div>
+
+  <div class="portada">
+    <h1>Porcentaje de Retención en los Cursos</h1>
+    <p>Complete los datos de sus cursos y secciones. Los por cientos de aprobación, bajas y fracasos se calculan
+       automáticamente a partir de la matrícula informada. Al terminar, descargue el formulario en Word con la firma
+       pendiente de rúbrica.</p>
+  </div>
+
+  <section class="panel">
+    <h2>Identificación</h2>
+    <div class="cuerpo rejilla">
+      <div class="c6">
+        <label for="colegio">Colegio</label>
+        <input type="text" id="colegio" list="colegios" placeholder="Colegio de Administración de Empresas">
+        <datalist id="colegios">
+          <option value="Colegio de Administración de Empresas"></option>
+          <option value="Colegio de Artes y Humanidades"></option>
+          <option value="Colegio de Ciencias"></option>
+          <option value="Colegio de Ciencias Sociales"></option>
+          <option value="Colegio de Educación"></option>
+          <option value="Colegio de Derecho"></option>
+        </datalist>
+      </div>
+      <div class="c6">
+        <label for="departamento">Departamento</label>
+        <input type="text" id="departamento" placeholder="Departamento de Gerencia">
+      </div>
+
+      <div class="c3">
+        <label for="tipoTermino">Término</label>
+        <select id="tipoTermino">
+          <option value="Semestre">Semestre</option>
+          <option value="Trimestre">Trimestre</option>
+        </select>
+      </div>
+      <div class="c3">
+        <label for="valorTermino" id="lblValorTermino">Semestre</label>
+        <input type="text" id="valorTermino" placeholder="Primero" list="terminos">
+        <datalist id="terminos">
+          <option value="Primero"></option>
+          <option value="Segundo"></option>
+          <option value="Tercero"></option>
+          <option value="Verano"></option>
+        </datalist>
+      </div>
+      <div class="c3">
+        <label for="anio">Año académico</label>
+        <input type="text" id="anio" placeholder="2026-2027">
+      </div>
+      <div class="c3">
+        <label>Nivel del curso</label>
+        <div class="opciones">
+          <label><input type="radio" name="nivel" value="Subgraduado" checked> Sub graduado</label>
+          <label><input type="radio" name="nivel" value="Graduado"> Graduado</label>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2>Cursos y secciones <small>Matriculados = aprobaron + bajas + fracasaron</small></h2>
+    <div class="cuerpo">
+      <div class="marco">
+        <table>
+          <thead>
+            <tr>
+              <th rowspan="2" class="izq">Cursos/Sección</th>
+              <th rowspan="2">Matriculados<br>en el curso</th>
+              <th colspan="2">Aprobaron el curso</th>
+              <th colspan="2">Bajas del curso (WU, W)</th>
+              <th colspan="2">Fracasaron el curso</th>
+              <th rowspan="2">Promedio de ausencias<br>de los que fracasaron</th>
+              <th rowspan="2"></th>
+            </tr>
+            <tr>
+              <th>Cantidad</th><th>%</th>
+              <th>Cantidad</th><th>%</th>
+              <th>Cantidad</th><th>%</th>
+            </tr>
+          </thead>
+          <tbody id="filas"></tbody>
+        </table>
+      </div>
+
+      <div class="pie-tabla">
+        <button type="button" class="btn-fila" id="btnFila">+ Añadir curso</button>
+        <div class="resumen">
+          <div>Matriculados<b id="tMat">0</b></div>
+          <div>Aprobaron<b id="tApr">0</b></div>
+          <div>Bajas<b id="tBaj">0</b></div>
+          <div>Fracasaron<b id="tFra">0</b></div>
+          <div>Retención global<b id="tRet">—</b></div>
+        </div>
+      </div>
+      <div class="aviso" id="aviso"></div>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2>Certificación</h2>
+    <div class="cuerpo rejilla">
+      <div class="c8">
+        <label for="profesor">Nombre del profesor</label>
+        <input type="text" id="profesor" placeholder="Dr. Edgar Rodríguez Ríos">
+      </div>
+      <div class="c4">
+        <label for="fecha">Fecha</label>
+        <input type="date" id="fecha">
+      </div>
+    </div>
+  </section>
+
+  <div class="acciones">
+    <button type="button" class="btn btn-primario" id="btnGenerar">Genera documento Formulario CAI-03C</button>
+    <button type="button" class="btn btn-secundario" id="btnLimpiar">Limpiar formulario</button>
+    <span class="estado" id="estado"></span>
+  </div>
+
+  <footer>La línea de firma queda en blanco para rúbrica manuscrita. CAI/enero 2008.</footer>
+</div>
+
+<script>
+const LOGO_B64 = "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";
+
+/* ============================ interfaz ============================ */
+const $ = id => document.getElementById(id);
+const filas = $('filas');
+
+function nuevaFila(){
+  const tr = document.createElement('tr');
+  tr.innerHTML =
+    '<td><input type="text" class="curso" placeholder="BUAD 614-01"></td>' +
+    '<td class="num"><input type="text" inputmode="numeric" class="mat"></td>' +
+    '<td class="num"><input type="text" inputmode="numeric" class="apr"></td>' +
+    '<td class="calc pApr">—</td>' +
+    '<td class="num"><input type="text" inputmode="numeric" class="baj"></td>' +
+    '<td class="calc pBaj">—</td>' +
+    '<td class="num"><input type="text" inputmode="numeric" class="fra"></td>' +
+    '<td class="calc pFra">—</td>' +
+    '<td class="num"><input type="text" inputmode="decimal" class="aus"></td>' +
+    '<td class="quitar"><button type="button" class="btn-quitar" title="Eliminar este curso" aria-label="Eliminar este curso">&times;</button></td>';
+  tr.querySelector('.btn-quitar').addEventListener('click', () => {
+    tr.remove();
+    if(!filas.children.length) filas.appendChild(nuevaFila());
+    calcular();
+  });
+  tr.addEventListener('input', calcular);
+  return tr;
+}
+
+const num = v => { const n = parseFloat(String(v).replace(',', '.')); return isFinite(n) ? n : null; };
+const pct = (p, t) => (t > 0 && p !== null) ? (p / t * 100).toFixed(1) + '%' : '';
+
+function leerFilas(){
+  return [...filas.children].map(tr => {
+    const g = c => tr.querySelector('.' + c).value.trim();
+    const mat = num(g('mat')), apr = num(g('apr')), baj = num(g('baj')), fra = num(g('fra'));
+    return {
+      tr, curso: g('curso'), mat, apr, baj, fra, aus: g('aus'),
+      pApr: pct(apr, mat), pBaj: pct(baj, mat), pFra: pct(fra, mat),
+      vacia: !g('curso') && mat === null && apr === null && baj === null && fra === null && !g('aus')
+    };
+  });
+}
+
+function calcular(){
+  const datos = leerFilas();
+  let tm = 0, ta = 0, tb = 0, tf = 0;
+  const descuadres = [];
+
+  datos.forEach(d => {
+    d.tr.querySelector('.pApr').textContent = d.pApr || '—';
+    d.tr.querySelector('.pBaj').textContent = d.pBaj || '—';
+    d.tr.querySelector('.pFra').textContent = d.pFra || '—';
+    tm += d.mat || 0; ta += d.apr || 0; tb += d.baj || 0; tf += d.fra || 0;
+
+    const suma = (d.apr || 0) + (d.baj || 0) + (d.fra || 0);
+    const revisar = !d.vacia && d.mat !== null && suma !== d.mat;
+    d.tr.classList.toggle('descuadre', revisar);
+    if(revisar) descuadres.push((d.curso || 'Fila sin nombre') + ': ' + suma + ' de ' + d.mat);
+  });
+
+  $('tMat').textContent = tm;
+  $('tApr').textContent = ta;
+  $('tBaj').textContent = tb;
+  $('tFra').textContent = tf;
+  $('tRet').textContent = tm > 0 ? ((tm - tb) / tm * 100).toFixed(1) + '%' : '—';
+
+  $('aviso').textContent = descuadres.length
+    ? 'Revise estas filas: aprobados + bajas + fracasos no cuadra con la matrícula. ' + descuadres.join(' · ')
+    : '';
+}
+
+$('btnFila').addEventListener('click', () => { filas.appendChild(nuevaFila()); calcular(); });
+$('tipoTermino').addEventListener('change', e => {
+  $('lblValorTermino').textContent = e.target.value;
+  $('valorTermino').placeholder = e.target.value === 'Semestre' ? 'Primero' : 'Segundo';
+});
+
+const MESES = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+function fechaLarga(iso){
+  if(!iso) return '';
+  const [a, m, d] = iso.split('-').map(Number);
+  return d + ' de ' + MESES[m - 1] + ' de ' + a;
+}
+function hoyISO(){
+  const h = new Date();
+  return h.getFullYear() + '-' + String(h.getMonth() + 1).padStart(2, '0') + '-' + String(h.getDate()).padStart(2, '0');
+}
+
+function limpiar(){
+  ['colegio','departamento','valorTermino','anio','profesor'].forEach(i => $(i).value = '');
+  $('tipoTermino').value = 'Semestre';
+  $('lblValorTermino').textContent = 'Semestre';
+  document.querySelector('input[name=nivel][value=Subgraduado]').checked = true;
+  $('fecha').value = hoyISO();
+  filas.innerHTML = '';
+  for(let i = 0; i < 3; i++) filas.appendChild(nuevaFila());
+  calcular();
+  $('estado').textContent = '';
+  $('estado').className = 'estado';
+  $('colegio').focus();
+}
+$('btnLimpiar').addEventListener('click', () => {
+  const hayDatos = [...document.querySelectorAll('#colegio,#departamento,#valorTermino,#anio,#profesor,#filas input')]
+    .some(i => i.value.trim());
+  if(!hayDatos || confirm('Se borrarán todos los datos escritos en el formulario. ¿Desea continuar?')) limpiar();
+});
+
+/* ============================ ZIP (método store) ============================ */
+const TABLA_CRC = (() => {
+  const t = new Uint32Array(256);
+  for(let n = 0; n < 256; n++){
+    let c = n;
+    for(let k = 0; k < 8; k++) c = (c & 1) ? (0xEDB88320 ^ (c >>> 1)) : (c >>> 1);
+    t[n] = c >>> 0;
+  }
+  return t;
+})();
+function crc32(bytes){
+  let c = 0xFFFFFFFF;
+  for(let i = 0; i < bytes.length; i++) c = TABLA_CRC[(c ^ bytes[i]) & 0xFF] ^ (c >>> 8);
+  return (c ^ 0xFFFFFFFF) >>> 0;
+}
+function b64aBytes(b64){
+  const bin = atob(b64), out = new Uint8Array(bin.length);
+  for(let i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i);
+  return out;
+}
+function zip(archivos){
+  const cod = new TextEncoder(), locales = [], central = [];
+  let offset = 0;
+  const u16 = (a, v) => { a.push(v & 0xFF, (v >>> 8) & 0xFF); };
+  const u32 = (a, v) => { a.push(v & 0xFF, (v >>> 8) & 0xFF, (v >>> 16) & 0xFF, (v >>> 24) & 0xFF); };
+
+  archivos.forEach(f => {
+    const nombre = cod.encode(f.nombre);
+    const datos = typeof f.datos === 'string' ? cod.encode(f.datos) : f.datos;
+    const crc = crc32(datos), lh = [];
+    u32(lh, 0x04034b50); u16(lh, 10); u16(lh, 0); u16(lh, 0); u16(lh, 0); u16(lh, 0);
+    u32(lh, crc); u32(lh, datos.length); u32(lh, datos.length);
+    u16(lh, nombre.length); u16(lh, 0);
+    locales.push(new Uint8Array(lh), nombre, datos);
+
+    const ch = [];
+    u32(ch, 0x02014b50); u16(ch, 20); u16(ch, 10); u16(ch, 0); u16(ch, 0); u16(ch, 0); u16(ch, 0);
+    u32(ch, crc); u32(ch, datos.length); u32(ch, datos.length);
+    u16(ch, nombre.length); u16(ch, 0); u16(ch, 0); u16(ch, 0); u16(ch, 0); u32(ch, 0); u32(ch, offset);
+    central.push(new Uint8Array(ch), nombre);
+
+    offset += 30 + nombre.length + datos.length;
+  });
+
+  const tamCentral = central.reduce((s, p) => s + p.length, 0);
+  const fin = [];
+  u32(fin, 0x06054b50); u16(fin, 0); u16(fin, 0);
+  u16(fin, archivos.length); u16(fin, archivos.length);
+  u32(fin, tamCentral); u32(fin, offset); u16(fin, 0);
+
+  const partes = [...locales, ...central, new Uint8Array(fin)];
+  const total = partes.reduce((s, p) => s + p.length, 0);
+  const salida = new Uint8Array(total);
+  let p = 0;
+  partes.forEach(x => { salida.set(x, p); p += x.length; });
+  return new Blob([salida], {type:'application/vnd.openxmlformats-officedocument.wordprocessingml.document'});
+}
+
+/* ============================ OOXML ============================ */
+const esc = s => String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+
+const NS = 'xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" ' +
+           'xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" ' +
+           'xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" ' +
+           'xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" ' +
+           'xmlns:pic="http://schemas.openxmlformats.org/drawingml/2006/picture"';
+
+function run(texto, o){
+  o = o || {};
+  const sz = o.sz || 20;
+  let rpr = '<w:rPr>';
+  if(o.font) rpr += '<w:rFonts w:ascii="' + o.font + '" w:hAnsi="' + o.font + '"/>';
+  if(o.b) rpr += '<w:b/>';
+  if(o.i) rpr += '<w:i/>';
+  rpr += '<w:sz w:val="' + sz + '"/><w:szCs w:val="' + sz + '"/></w:rPr>';
+  return String(texto == null ? '' : texto).split('\n').map((t, k) =>
+    (k ? '<w:r><w:br/></w:r>' : '') + '<w:r>' + rpr + '<w:t xml:space="preserve">' + esc(t) + '</w:t></w:r>'
+  ).join('');
+}
+function para(runs, align, antes, despues){
+  const a = (align && align !== 'left') ? '<w:jc w:val="' + align + '"/>' : '';
+  return '<w:p><w:pPr><w:spacing w:before="' + (antes || 0) + '" w:after="' + (despues || 0) + '"/>' + a + '</w:pPr>' + runs + '</w:p>';
+}
+const BORDES = '<w:tcBorders><w:top w:val="single" w:sz="8" w:color="000000"/><w:left w:val="single" w:sz="8" w:color="000000"/>' +
+               '<w:bottom w:val="single" w:sz="8" w:color="000000"/><w:right w:val="single" w:sz="8" w:color="000000"/></w:tcBorders>';
+const SIN_BORDES = '<w:tcBorders><w:top w:val="nil"/><w:left w:val="nil"/><w:bottom w:val="nil"/><w:right w:val="nil"/></w:tcBorders>';
+
+function tc(w, contenido, o){
+  o = o || {};
+  let p = '<w:tcPr><w:tcW w:w="' + w + '" w:type="dxa"/>';
+  if(o.span > 1) p += '<w:gridSpan w:val="' + o.span + '"/>';
+  if(o.vmerge === 'restart') p += '<w:vMerge w:val="restart"/>';
+  else if(o.vmerge === 'cont') p += '<w:vMerge/>';
+  p += (o.borders === false ? SIN_BORDES : BORDES);
+  p += '<w:vAlign w:val="' + (o.valign || 'center') + '"/></w:tcPr>';
+  return '<w:tc>' + p + contenido + '</w:tc>';
+}
+function celdaLinea(w, texto, sz, align){
+  const p = '<w:tcPr><w:tcW w:w="' + w + '" w:type="dxa"/>' +
+            '<w:tcBorders><w:top w:val="nil"/><w:left w:val="nil"/>' +
+            '<w:bottom w:val="single" w:sz="6" w:color="000000"/><w:right w:val="nil"/></w:tcBorders>' +
+            '<w:vAlign w:val="bottom"/></w:tcPr>';
+  return '<w:tc>' + p + para(run(texto, {sz: sz || 22}), align || 'left') + '</w:tc>';
+}
+function celdaRotulo(w, texto, sz, b){
+  const p = '<w:tcPr><w:tcW w:w="' + w + '" w:type="dxa"/>' + SIN_BORDES + '<w:vAlign w:val="bottom"/></w:tcPr>';
+  return '<w:tc>' + p + para(run(texto, {b: b !== false, sz: sz || 22})) + '</w:tc>';
+}
+function tablaMini(anchos, filasXml, total, alto){
+  const grid = anchos.map(x => '<w:gridCol w:w="' + x + '"/>').join('');
+  const trs = filasXml.map(r => '<w:tr><w:trPr><w:trHeight w:val="' + (alto || 340) + '"/></w:trPr>' + r + '</w:tr>').join('');
+  return '<w:tbl><w:tblPr><w:tblW w:w="' + total + '" w:type="dxa"/><w:tblLayout w:type="fixed"/>' +
+         '<w:tblCellMar><w:left w:w="40" w:type="dxa"/><w:right w:w="40" w:type="dxa"/></w:tblCellMar></w:tblPr>' +
+         '<w:tblGrid>' + grid + '</w:tblGrid>' + trs + '</w:tbl>' +
+         '<w:p><w:pPr><w:spacing w:after="0"/><w:rPr><w:sz w:val="8"/></w:rPr></w:pPr></w:p>';
+}
+function ajusta(t, ancho, base){
+  t = String(t || ''); ancho = ancho || 30; base = base || 22;
+  return t.length <= ancho ? base : (t.length <= ancho * 1.5 ? 18 : 16);
+}
+
+function documentoXml(d){
+  const W = [2100, 1500, 1200, 1200, 1200, 1200, 1200, 1200, 2160];
+  const cuerpo = [];
+
+  cuerpo.push(para(run('Formulario para Determinar el Porcentaje de Retención en los Cursos', {b:true, sz:24}), 'center', 0, 240));
+
+  const col1 = 5200, col2 = 4900, col3 = 2860;
+  const c1 = tablaMini([1700, 3400], [
+    celdaRotulo(1700, 'Colegio') + celdaLinea(3400, d.colegio, ajusta(d.colegio, 28)),
+    celdaRotulo(1700, 'Departamento') + celdaLinea(3400, d.departamento, ajusta(d.departamento, 28))
+  ], 5100);
+
+  const sem = d.tipoTermino === 'Semestre' ? d.valorTermino : '';
+  const tri = d.tipoTermino === 'Trimestre' ? d.valorTermino : '';
+  const c2 = tablaMini([1150, 1000, 1600, 1150], [
+    celdaRotulo(1150, '\u2022 Semestre', 20) + celdaLinea(1000, sem, ajusta(sem, 9, 20)) +
+    celdaRotulo(1600, 'A\u00f1o acad\u00e9mico', 20) + celdaLinea(1150, d.anio, ajusta(d.anio, 10, 20)),
+    celdaRotulo(1150, '\u2022 Trimestre', 20) + celdaLinea(1000, tri, ajusta(tri, 9, 20)) +
+    celdaRotulo(1600, '', 20) + celdaRotulo(1150, '', 20)
+  ], 4900, 300);
+
+  const sub = d.nivel === 'Subgraduado' ? '\u2612' : '\u2610';
+  const gra = d.nivel === 'Graduado' ? '\u2612' : '\u2610';
+  const c3 = para(run('Nivel de curso', {b:true, sz:20}), 'left', 40, 20) +
+             para(run(sub + ' ', {sz:22, font:'Segoe UI Symbol'}) + run('Sub graduado', {sz:20}), 'left', 0, 20) +
+             para(run(gra + ' ', {sz:22, font:'Segoe UI Symbol'}) + run('Graduado', {sz:20}), 'left', 0, 40);
+
+  cuerpo.push('<w:tbl><w:tblPr><w:tblW w:w="12960" w:type="dxa"/><w:tblLayout w:type="fixed"/>' +
+    '<w:tblCellMar><w:left w:w="80" w:type="dxa"/><w:right w:w="80" w:type="dxa"/></w:tblCellMar></w:tblPr>' +
+    '<w:tblGrid><w:gridCol w:w="' + col1 + '"/><w:gridCol w:w="' + col2 + '"/><w:gridCol w:w="' + col3 + '"/></w:tblGrid><w:tr>' +
+    tc(col1, c1, {borders:false, valign:'top'}) +
+    tc(col2, c2, {valign:'center'}) +
+    tc(col3, c3, {valign:'center'}) +
+    '</w:tr></w:tbl>');
+  cuerpo.push(para(run(''), 'left', 0, 120));
+
+  const th = (w, texto, span, vmerge, sz) =>
+    tc(w, para(run(texto, {b:true, sz: sz || 18}), 'center', 40, 40), {span:span, vmerge:vmerge});
+  const rows = [];
+
+  rows.push('<w:tr><w:trPr><w:cantSplit/></w:trPr>' +
+    th(W[0], 'Cursos/Sección', 1, 'restart', 20) +
+    th(W[1]+W[2]+W[3]+W[4]+W[5]+W[6]+W[7], 'Cantidad de Estudiantes', 7) +
+    th(W[8], 'Promedio del Número de Ausencias de Estudiantes que fracasaron en el curso', 1, 'restart') +
+    '</w:tr>');
+
+  rows.push('<w:tr><w:trPr><w:cantSplit/></w:trPr>' +
+    tc(W[0], para(run('')), {vmerge:'cont'}) +
+    th(W[1], 'Matriculados\nen el curso', 1, 'restart') +
+    th(W[2]+W[3], 'Aprobaron\nel curso', 2) +
+    th(W[4]+W[5], 'Bajas del curso\n(WU, W)', 2) +
+    th(W[6]+W[7], 'Fracasaron el curso', 2) +
+    tc(W[8], para(run('')), {vmerge:'cont'}) +
+    '</w:tr>');
+
+  let r3 = tc(W[0], para(run('')), {vmerge:'cont'}) + tc(W[1], para(run('')), {vmerge:'cont'});
+  [2, 4, 6].forEach(i => { r3 += th(W[i], 'Cantidad', 1, null, 16) + th(W[i+1], '%', 1, null, 16); });
+  r3 += tc(W[8], para(run('')), {vmerge:'cont'});
+  rows.push('<w:tr><w:trPr><w:cantSplit/></w:trPr>' + r3 + '</w:tr>');
+
+  d.filas.forEach(f => {
+    let celdas = tc(W[0], para(run(f.curso, {sz:20}), 'left', 60, 60));
+    [f.mat, f.apr, f.pApr, f.baj, f.pBaj, f.fra, f.pFra, f.aus].forEach((v, i) => {
+      celdas += tc(W[i+1], para(run(v, {sz:20}), 'center', 60, 60));
+    });
+    rows.push('<w:tr><w:trPr><w:cantSplit/></w:trPr>' + celdas + '</w:tr>');
+  });
+
+  cuerpo.push('<w:tbl><w:tblPr><w:tblW w:w="12960" w:type="dxa"/><w:jc w:val="center"/><w:tblLayout w:type="fixed"/>' +
+    '<w:tblCellMar><w:left w:w="60" w:type="dxa"/><w:right w:w="60" w:type="dxa"/></w:tblCellMar></w:tblPr>' +
+    '<w:tblGrid>' + W.map(w => '<w:gridCol w:w="' + w + '"/>').join('') + '</w:tblGrid>' + rows.join('') + '</w:tbl>');
+
+  cuerpo.push(para(run(''), 'left', 0, 360));
+
+  const firma = celdaRotulo(1000, 'Nombre', 22, false) + celdaLinea(4200, d.profesor, ajusta(d.profesor, 34)) +
+                celdaRotulo(800, 'Firma', 22, false) + celdaLinea(3100, '') +
+                celdaRotulo(800, 'Fecha', 22, false) + celdaLinea(3060, d.fecha, ajusta(d.fecha, 26));
+  cuerpo.push(tablaMini([1000, 4200, 800, 3100, 800, 3060], [firma], 12960, 420));
+  cuerpo.push(para(run('CAI/enero 2008', {sz:18}), 'right', 240, 0));
+
+  const sect = '<w:sectPr><w:headerReference w:type="default" r:id="rId2"/>' +
+    '<w:pgSz w:w="15840" w:h="12240" w:orient="landscape"/>' +
+    '<w:pgMar w:top="1440" w:right="1440" w:bottom="1080" w:left="1440" w:header="576" w:footer="576" w:gutter="0"/></w:sectPr>';
+
+  return '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><w:document ' + NS + '><w:body>' +
+         cuerpo.join('') + sect + '</w:body></w:document>';
+}
+
+const ENCABEZADO =
+  '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><w:hdr ' + NS + '>' +
+  '<w:tbl><w:tblPr><w:tblW w:w="12960" w:type="dxa"/><w:tblLayout w:type="fixed"/></w:tblPr>' +
+  '<w:tblGrid><w:gridCol w:w="1400"/><w:gridCol w:w="8360"/><w:gridCol w:w="3200"/></w:tblGrid><w:tr>' +
+  tc(1400, '<w:p><w:r><w:drawing><wp:inline distT="0" distB="0" distL="0" distR="0">' +
+    '<wp:extent cx="548640" cy="548640"/><wp:effectExtent l="0" t="0" r="0" b="0"/>' +
+    '<wp:docPr id="1" name="Escudo PUCPR"/><a:graphic><a:graphicData ' +
+    'uri="http://schemas.openxmlformats.org/drawingml/2006/picture"><pic:pic>' +
+    '<pic:nvPicPr><pic:cNvPr id="1" name="escudo.jpeg"/><pic:cNvPicPr/></pic:nvPicPr>' +
+    '<pic:blipFill><a:blip r:embed="rIdImg"/><a:stretch><a:fillRect/></a:stretch></pic:blipFill>' +
+    '<pic:spPr><a:xfrm><a:off x="0" y="0"/><a:ext cx="548640" cy="548640"/></a:xfrm>' +
+    '<a:prstGeom prst="rect"><a:avLst/></a:prstGeom></pic:spPr></pic:pic>' +
+    '</a:graphicData></a:graphic></wp:inline></w:drawing></w:r></w:p>', {borders:false}) +
+  tc(8360, para(run('PONTIFICIA UNIVERSIDAD CATÓLICA DE PUERTO RICO', {b:true, i:true, sz:20}), 'center') +
+           para(run('OFICINA DE AVALÚO INSTITUCIONAL', {b:true, i:true, sz:20}), 'center'), {borders:false}) +
+  tc(3200, para(run('Formulario CAI-03C (v.2008)', {sz:20}), 'right'), {borders:false}) +
+  '</w:tr></w:tbl><w:p><w:pPr><w:spacing w:after="0"/></w:pPr></w:p></w:hdr>';
+
+const TIPOS = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+  '<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">' +
+  '<Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>' +
+  '<Default Extension="xml" ContentType="application/xml"/>' +
+  '<Default Extension="jpeg" ContentType="image/jpeg"/>' +
+  '<Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/>' +
+  '<Override PartName="/word/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml"/>' +
+  '<Override PartName="/word/header1.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.header+xml"/></Types>';
+
+const RELS = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+  '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">' +
+  '<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/></Relationships>';
+
+const DOC_RELS = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+  '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">' +
+  '<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/>' +
+  '<Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/header" Target="header1.xml"/></Relationships>';
+
+const HDR_RELS = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+  '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">' +
+  '<Relationship Id="rIdImg" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" Target="media/image1.jpeg"/></Relationships>';
+
+const ESTILOS = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+  '<w:styles xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:docDefaults><w:rPrDefault><w:rPr>' +
+  '<w:rFonts w:ascii="Arial" w:hAnsi="Arial" w:cs="Arial"/><w:sz w:val="20"/><w:szCs w:val="20"/><w:lang w:val="es-PR"/>' +
+  '</w:rPr></w:rPrDefault><w:pPrDefault><w:pPr><w:spacing w:after="0" w:line="240" w:lineRule="auto"/></w:pPr></w:pPrDefault>' +
+  '</w:docDefaults><w:style w:type="paragraph" w:default="1" w:styleId="Normal"><w:name w:val="Normal"/></w:style></w:styles>';
+
+/* ============================ generación ============================ */
+function generar(){
+  const estado = $('estado');
+  const datos = leerFilas().filter(f => !f.vacia);
+
+  if(!datos.length){
+    estado.className = 'estado error';
+    estado.textContent = 'Añada al menos un curso con su matrícula antes de generar el documento.';
+    return;
+  }
+  if(!$('colegio').value.trim() || !$('departamento').value.trim()){
+    estado.className = 'estado error';
+    estado.textContent = 'Indique el colegio y el departamento.';
+    return;
+  }
+
+  const fmt = v => (v === null || v === undefined || v === '') ? '' : String(v);
+  const filasDoc = datos.map(f => ({
+    curso: f.curso, mat: fmt(f.mat), apr: fmt(f.apr), pApr: f.pApr,
+    baj: fmt(f.baj), pBaj: f.pBaj, fra: fmt(f.fra), pFra: f.pFra, aus: f.aus
+  }));
+  while(filasDoc.length < 7){
+    filasDoc.push({curso:'', mat:'', apr:'', pApr:'', baj:'', pBaj:'', fra:'', pFra:'', aus:''});
+  }
+
+  const d = {
+    colegio: $('colegio').value.trim(),
+    departamento: $('departamento').value.trim(),
+    tipoTermino: $('tipoTermino').value,
+    valorTermino: $('valorTermino').value.trim(),
+    anio: $('anio').value.trim(),
+    nivel: document.querySelector('input[name=nivel]:checked').value,
+    profesor: $('profesor').value.trim(),
+    fecha: fechaLarga($('fecha').value),
+    filas: filasDoc
+  };
+
+  try{
+    const blob = zip([
+      {nombre:'[Content_Types].xml', datos: TIPOS},
+      {nombre:'_rels/.rels', datos: RELS},
+      {nombre:'word/_rels/document.xml.rels', datos: DOC_RELS},
+      {nombre:'word/_rels/header1.xml.rels', datos: HDR_RELS},
+      {nombre:'word/styles.xml', datos: ESTILOS},
+      {nombre:'word/header1.xml', datos: ENCABEZADO},
+      {nombre:'word/media/image1.jpeg', datos: b64aBytes(LOGO_B64)},
+      {nombre:'word/document.xml', datos: documentoXml(d)}
+    ]);
+
+    const partes = ['Formulario_CAI-03C'];
+    if(d.departamento) partes.push(d.departamento.replace(/[^\wÁÉÍÓÚÑáéíóúñ ]+/g, '').trim().replace(/\s+/g, '_'));
+    if(d.anio) partes.push(d.anio.replace(/\s+/g, ''));
+    const nombre = partes.join('_') + '.docx';
+
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = nombre;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 4000);
+
+    estado.className = 'estado';
+    estado.textContent = $('aviso').textContent
+      ? 'Documento generado con avisos de cuadre: ' + nombre
+      : 'Documento generado: ' + nombre;
+  }catch(err){
+    estado.className = 'estado error';
+    estado.textContent = 'No se pudo generar el documento: ' + err.message;
+  }
+}
+$('btnGenerar').addEventListener('click', generar);
+
+/* arranque */
+$('fecha').value = hoyISO();
+for(let i = 0; i < 3; i++) filas.appendChild(nuevaFila());
+calcular();
+</script>
+</body>
+</html>
